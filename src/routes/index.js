@@ -12,7 +12,7 @@ const publicRoutes = [
   { path: "/following", component: Following },
   { path: "/confirm_order", component: OrderConfirm , layout: HeaderOnly },
   { path: "/upload", component: Upload, layout: null },
-  { path: "/signin", component: SignInPage},
+  { path: "/signin", component: SignInPage, layout: null},
 ];
 
 
