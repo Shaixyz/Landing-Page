@@ -1,59 +1,72 @@
 import React from 'react';
-import facebookIcon from "~/assets/facebookIcon.png";
-import googleIcon from "~/assets/googleIcon.png";
-import instagramIcon from "~/assets/instagramIcon.png";
+import image from '~/assets/image.jpg';
+import google from '~/assets/google.svg';
 
 function SignIn() {
-    return (
-        <div className="max-w-md mx-auto mt-2 p-6 bg-white">
-            <h1 className="text-center font-bold text-3xl text-black mb-2">Welcome back!</h1>
-            <p className="text-center text-base pt-1">Let's customize your style</p>
-            <div className="mt-10">
-                <label htmlFor="email" className="text-base font-semibold text-gray-600 ">E-mail or phone number</label>
-                <input
-                    type="text"
-                    id="email"
-                    placeholder="Enter your email or phone number"
-                    className="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm bg-gray-100 p-2"
-                />
+  return (
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+      <div
+        class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
+      >
+
+        <div class="flex flex-col justify-center p-8 md:p-14">
+          <span class="mb-3 text-4xl font-bold">Welcome back</span>
+          <span class="font-light text-gray-400 mb-8">
+            Welcom back! Please enter your details
+          </span>
+          <div class="py-4">
+            <span class="text-base font-semibold text-gray-600">Email</span>
+            <input
+              type="text"
+              class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+              name="email"
+              id="email"
+            />
+          </div>
+          <div class="py-4">
+            <span class="text-base font-semibold text-gray-600">Password</span>
+            <input
+              type="password"
+              name="pass"
+              id="pass"
+              class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+            />
+          </div>
+          <div class="flex justify-between w-full py-4">
+            <div class="mr-24">
+              <input type="checkbox" name="ch" id="ch" class="mr-2" />
+              <span class="text-base font-medium text-gray-400">Remember me</span>
             </div>
-            <div className="mt-4">
-                <label htmlFor="password" className="text-base font-semibold text-gray-600">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    className="block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm bg-gray-100 p-2"
-                />
-            </div>
-            <div className="mt-8">
-                <button
-                    type="submit"
-                    className="w-full py-2 px-4 bg-black border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:bg-orange-600"
-                >
-                    Sign in
-                </button>
-            <div className="mt-4 text-sm text-gray-600 text-right italic">
-                Don't have an account? 
-            <span className="hover:text-orange-500 text-sm m-1 font-medium">Sign Up</span>
-            </div>
-            </div>
-            <div className="mt-8 flex justify-between">
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 bg-white border border-gray-200 border-opacity-50 rounded-md px-3 py-1 shadow-md hover:bg-gray-100 hover:border-gray-300">
-                    <img src={googleIcon} alt="Google Icon" className="h-5 w-5 m-1 fill-current" />
-                    Google
-                </button>
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 bg-white border border-gray-200 border-opacity-50 rounded-md px-3 py-1 shadow-md hover:bg-gray-100 hover:border-gray-300">
-                    <img src={facebookIcon} alt="Facebook Icon" className="h-5 w-5 m-1 fill-current" />
-                    Facebook
-                </button>
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 bg-white border border-gray-200 border-opacity-50 rounded-md px-3 py-1 shadow-md hover:bg-gray-100 hover:border-gray-300">
-                    <img src={instagramIcon} alt="Instagram Icon" className="h-5 w-5 m-1 fill-current" />
-                    Instagram
-                </button>
-            </div>
+            <span class="font-bold text-md italic hover:text-orange-500">Forgot password?</span>
+          </div>
+          <button
+           class="w-full p-2 mb-6 bg-black text-white border border-transparent rounded-lg shadow-sm text-base font-medium hover:bg-orange-600"
+          >
+            Sign in
+          </button>
+          <button
+            class="w-full border border-gray-300 text-md p-2 rounded-lg mb-6 hover:bg-black hover:text-white"
+          >
+            <img src={google} alt="img" class="w-6 h-6 inline mr-2 test-base" />
+            Sign in with Google
+          </button>
+          <div class="text-center text-gray-400">
+            Dont'have an account?
+            <span class="font-bold text-black hover:text-orange-500"> Sign up for free</span>
+          </div>
         </div>
-    );
+
+        <div class="relative">
+          <img
+            src={image}
+            alt="img"
+            class="w-[380px] h-full hidden rounded-r-2xl md:block object-cover"
+          />
+
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default SignIn;
