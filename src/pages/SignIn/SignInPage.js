@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import signin from '~/assets/signin.jpg';
 import google from '~/assets/google.svg';
 
@@ -37,7 +38,7 @@ function SignIn() {
               <input type="checkbox" name="ch" id="ch" class="mr-2" />
               <span class="text-base font-medium text-gray-400">Remember me</span>
             </div>
-            <span class="font-bold text-md italic hover:text-orange-500">Forgot password?</span>
+            <Link to="/forgot-password" class="font-bold text-md italic hover:text-orange-500">Forgot password?</Link>
           </div>
           <button
            class="w-full p-2 mb-6 bg-black text-white border border-transparent rounded-lg shadow-sm text-base font-medium hover:bg-orange-600"
@@ -52,7 +53,7 @@ function SignIn() {
           </button>
           <div class="text-center text-gray-400">
             Dont'have an account?
-            <span class="font-bold text-black hover:text-orange-500"> Sign up for free</span>
+            <Link to ="/signup" class="font-bold text-black hover:text-orange-500"> Sign up for free</Link>
           </div>
         </div>
 
