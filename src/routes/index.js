@@ -7,6 +7,7 @@ import Upload from "~/pages/Upload"
 import SignInPage from "~/pages/SignIn/SignInPage"
 import SignUpPage from "~/pages/SignUp/SignUpPage"
 import ForgotPWDPage from "~/pages/ForgotPWD/ForgotPWDPage"
+import LogIn from "~/components/auth/LoginPage"
 //Public routes 
 
 const publicRoutes = [
