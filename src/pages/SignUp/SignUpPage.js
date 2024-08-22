@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import signup from '~/assets/signup.jpg';
 import google from '~/assets/google.svg';
 
@@ -62,7 +63,7 @@ function SignUp() {
           </button>
           <div class="text-center text-gray-400">
             Already have an account?
-            <span class="font-bold text-black hover:text-orange-500"> Sign in</span>
+            <Link to="/signin" className="font-bold text-black hover:text-orange-500"> Sign in</Link>
           </div>
         </div>
 
