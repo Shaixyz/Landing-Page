@@ -75,7 +75,9 @@ function ForgotPassword() {
 //   };
 
   return (
-    <div className="max-w-md mx-auto mt-2 p-6 bg-white">
+    
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      <div className="max-w-md mx-auto mt-2 p-6 bg-white rounded-lg shadow-md">
       <ToastContainer />
       {step === 1 && (
         <>
@@ -173,6 +175,7 @@ function ForgotPassword() {
           </form>
         </>
       )}
+    </div>
     </div>
   );
 }
