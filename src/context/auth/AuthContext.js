@@ -30,11 +30,14 @@ const AuthProvider = ({ children }) => {
 			const token = localStorage.getItem('token');
 			if (token) {
 				try {
+					
 					const res = await AxiosInterceptor.get("/api/account");
+					// const res = await axios.get(`${process.env.REACT_APP_PRO_API}/api/account`);
 					if (res.status === 200) {
 						setUser(res.data);
 						setAuthenticated(true);
 						setError(null);
+						setIsLoading(false);
 						navigate("/");
 					}
 				} catch (error) {
@@ -44,6 +47,7 @@ const AuthProvider = ({ children }) => {
 						title: "Token Error",
 						message: "Phiên đăng nhập của bạn đã hết hạn, hãy đăng nhập lại."
 					});
+					return;
 				}
 			}
 			setIsLoading(false);
@@ -53,67 +57,75 @@ const AuthProvider = ({ children }) => {
 
 	const login = async (userAccount) => {
 		setIsLoading(true);
+		let res;
 		try {
-			const res = await AxiosInterceptor.post(
-				("/api/account/login"),
+			console.log("Sending login request...");
+			res = await axios.post(
+				`${process.env.REACT_APP_PRO_API}/api/account/login`,
 				{
 					userName: userAccount.userName,
 					password: userAccount.password
 				}
 			);
-			if (res.status === 200) {
-				const { token, refreshToken } = res.data;
-				localStorage.setItem('token', token);
-				localStorage.setItem('refreshToken', refreshToken);
+			console.log("Login response received:", res);
+		} catch (error) { //res.status !== 200
+			setAuthenticated(false);
+			setError(error?.response?.data?.reasons[0]);
+			setIsLoading(false);
+			return;
+		}
+		if (res.status === 200) {
+			setToken(res.data.token);
+			const decode = jwtDecode(res.data.token);
+			const userInfo = JSON.parse(decode.UserInfo || '{}');
+			const clientRole = userInfo.Role; // Lấy vai trò từ UserInfo
+			// const clientRole = res.data.role;
+            console.log("user info", decode);
+			console.log("Role", clientRole);
 
-				const decode = jwtDecode(token);
-				const clientRole = decode.role;
-
-				if (clientRole === "Admin" || clientRole === "Manager") {
-					let resData;
-					try {
-						const resData = await axios.get(`${process.env.REACT_APP_PRO_API}/api/account`, {
-							headers: {
-								Authorization: `Bearer ${token}`
-							}
+			
+			if (clientRole === "Admin" || clientRole === "Manager" || clientRole === "Student") {
+				localStorage.setItem('token', res.data.token);
+				localStorage.setItem('refreshToken', res.data.refreshToken);
+				let resData;
+				try {
+					 resData = await axios.get(`${process.env.REACT_APP_PRO_API}/api/account`, {
+						headers: {
+							Authorization: `Bearer ${res.data.token}`
 						}
-						);
-
-						if (resData.status === 200) {
-							if (resData.data.status === "ACTIVE") {
-								setUser(resData.data);
-								setAuthenticated(true);
-								setError(null);
-								navigate("/");
-							} else {
-								await logout();
-								setError({
-									title: "Account Banned",
-									message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
-								});
-							}
-						}
-					} catch (error) {
+					}
+					);
+				} catch (error) {
+					await logout();
+					setIsLoading(false);
+					setError({
+						title: "Token Error",
+						message: "Lỗi xác thực, hãy thử lại."
+					});
+					return;
+				}
+				if (resData.status === 200) {
+					if (resData.data.status === "ACTIVE") {
+						setUser(resData.data);
+						setAuthenticated(true);
+						setError(null);
+						console.log("Login successful, navigating to home...");
+						navigate("/");
+					} else {
 						await logout();
 						setError({
-							title: "Token Error",
-							message: "Lỗi xác thực, hãy thử lại."
+							title: "Account Banned",
+							message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
 						});
 					}
-				} else {
-					setAuthenticated(false);
-					setError({
-						title: "Access Denied",
-						message: "Truy cập của bạn bị từ chối, hãy thử lại."
-					});
 				}
+			} else {
+				setAuthenticated(false);
+				setError({
+					title: "Access Denied",
+					message: "Truy cập của bạn bị từ chối, hãy thử lại."
+				});
 			}
-		} catch (error) {
-			setAuthenticated(false);
-			setError({
-				title: "Login Error",
-				message: "Tên người dùng hoặc mật khẩu không đúng."
-			});
 		}
 		setIsLoading(false);
 	};
