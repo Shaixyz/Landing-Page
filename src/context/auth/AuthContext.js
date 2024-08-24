@@ -12,6 +12,8 @@ const AuthContext = createContext({
 	token: null,
 	login: () => { },
 	logout: () => { },
+	signup:() => { },
+	verify:() => {},
 	error: null,
 });
 
@@ -37,7 +39,6 @@ const AuthProvider = ({ children }) => {
 						setUser(res.data);
 						setAuthenticated(true);
 						setError(null);
-						setIsLoading(false);
 						navigate("/");
 					}
 				} catch (error) {
@@ -83,7 +84,7 @@ const AuthProvider = ({ children }) => {
             console.log("user info", decode);
 			console.log("Role", clientRole);
 
-			
+
 			if (clientRole === "Admin" || clientRole === "Manager" || clientRole === "Student") {
 				localStorage.setItem('token', res.data.token);
 				localStorage.setItem('refreshToken', res.data.refreshToken);
@@ -105,19 +106,24 @@ const AuthProvider = ({ children }) => {
 					return;
 				}
 				if (resData.status === 200) {
-					if (resData.data.status === "ACTIVE") {
-						setUser(resData.data);
+					// if (resData.data.status === "ACTIVE") {
+					// 	setUser(resData.data);
+					// 	setAuthenticated(true);
+					// 	setError(null);
+					// 	console.log("Login successful, navigating to home...");
+					// 	navigate("/");
+					// } else {
+					// 	await logout();
+					// 	setError({
+					// 		title: "Account Banned",
+					// 		message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
+					// 	});
+					// }
+					setUser(resData.data);
 						setAuthenticated(true);
 						setError(null);
 						console.log("Login successful, navigating to home...");
 						navigate("/");
-					} else {
-						await logout();
-						setError({
-							title: "Account Banned",
-							message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
-						});
-					}
 				}
 			} else {
 				setAuthenticated(false);
@@ -139,6 +145,167 @@ const AuthProvider = ({ children }) => {
 		localStorage.removeItem('refreshToken');
 	};
 
+
+	const signup = async (userDetails) => {
+		setIsLoading(true);
+		let registerRes;
+		try {
+		   registerRes = await axios.post(
+			`${process.env.REACT_APP_PRO_API}/api/account/register`,
+			{
+			  userName: userDetails.userName,
+			  password: userDetails.password,
+			  role: userDetails.role,
+			}
+		  );
+		  console.log("Register response received:", registerRes);
+	
+		  if (registerRes.status === 201) {
+			// Redirect to verify page
+			navigate('/verify');
+		  }
+		} catch (error) {
+			console.log(error);
+			
+		  setError({
+			
+			title: "Registration Error",
+			message: error?.response?.data?.reasons[0] || "Failed to register, please try again.",
+		  });
+		} finally {
+		  setIsLoading(false);
+		}
+	  };
+	
+	  const verify = async (verificationData) => {
+		setIsLoading(true);
+		let verifyRes;
+		try {
+			console.log("Sending request...");
+			verifyRes = await axios.post(
+				`${process.env.REACT_APP_PRO_API}/api/account/verify`,
+				{
+					code: verificationData.code,
+					email: verificationData.email,
+				}
+			);
+			console.log("Verify response received:", verifyRes);
+	
+			if (verifyRes.status === 200) {
+				const { token, refreshToken } = verifyRes.data;
+				setToken(token);
+				localStorage.setItem('token', token);
+				localStorage.setItem('refreshToken', refreshToken);
+	
+				const decode = jwtDecode(token);
+				const userInfo = JSON.parse(decode.UserInfo || '{}');
+				const clientRole = userInfo.Role; // Lấy vai trò từ UserInfo
+				console.log("user info", decode);
+				console.log("Role", clientRole);
+	
+				if (clientRole === "Admin" || clientRole === "Manager" || clientRole === "Student") {
+					let resData;
+					try {
+						resData = await axios.get(`${process.env.REACT_APP_PRO_API}/api/account`, {
+							headers: {
+								Authorization: `Bearer ${token}`
+							}
+						});
+					} catch (error) {
+						await logout();
+						setError({
+							title: "Token Error",
+							message: "Lỗi xác thực, hãy thử lại."
+						});
+						return;
+					}
+	
+					if (resData.status === 200) {
+						setUser(resData.data);
+						setAuthenticated(true);
+						setError(null);
+						console.log("Login successful, navigating to home...");
+						navigate("/");
+					}
+				} else {
+					setAuthenticated(false);
+					setError({
+						title: "Access Denied",
+						message: "Truy cập của bạn bị từ chối, hãy thử lại."
+					});
+				}
+			} else {
+				setError({
+					title: "Verification Failed",
+					message: "Mã xác thực không hợp lệ, hãy thử lại."
+				});
+			}
+		} catch (error) {
+			// Check if the error is a 400 Bad Request
+			if (error.response && error.response.status === 400) {
+				setError({
+					title: "Bad Request",
+					message: error.response.data.message || "Dữ liệu yêu cầu không hợp lệ. Vui lòng kiểm tra lại."
+				});
+			} else {
+				// General error handling
+				setError({
+					title: "Verification Error",
+					message: error.response?.data?.message || "Lỗi trong quá trình xác thực, hãy thử lại."
+				});
+			}
+			console.error("Verification error details:", error.response); // Log error details
+		} finally {
+			setIsLoading(false);
+		}
+	};
+	
+	const resend = async (email) => {
+		setIsLoading(true);
+		let resendRes;
+		try {
+			console.log("Sending resend request...");
+			resendRes = await axios.post(
+				`${process.env.REACT_APP_PRO_API}/api/account/resend`,
+				{
+					email: email,
+				}
+			);
+			console.log("Resend response received:", resendRes);
+	
+			if (resendRes.status === 200) {
+				setError({
+					title: "Resend Successful",
+					message: "A new verification code has been sent to your email.",
+				});
+			} else {
+				setError({
+					title: "Resend Failed",
+					message: "Failed to resend the verification code, please try again.",
+				});
+			}
+		} catch (error) {
+			// Handle specific error cases
+			if (error.response && error.response.status === 400) {
+				setError({
+					title: "Bad Request",
+					message: error.response.data.message || "Invalid request. Please check your data and try again.",
+				});
+			} else {
+				// General error handling
+				setError({
+					title: "Resend Error",
+					message: error.response?.data?.message || "Error resending verification code, please try again.",
+				});
+			}
+			console.error("Resend error details:", error.response); // Log error details
+		} finally {
+			setIsLoading(false);
+		}
+	};
+	
+	
+	
 	return (
 		<AuthContext.Provider
 			value={{
@@ -149,6 +316,9 @@ const AuthProvider = ({ children }) => {
 				setIsLoading,
 				login,
 				logout,
+				signup,
+				verify,
+				resend,
 				error
 			}}
 		>
