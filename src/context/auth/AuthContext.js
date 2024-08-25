@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
 			setIsLoading(false);
 		};
 		fetchUser();
-	}, [navigate]);
+	}, []);
 
 	const login = async (userAccount) => {
 		setIsLoading(true);
