@@ -28,16 +28,17 @@ const AuthProvider = ({ children }) => {
 		const fetchUser = async () => {
 			setIsLoading(true);
 			const token = localStorage.getItem('token');
+			console.log("tok2", token);
 			if (token) {
+				console.log("haha");
+				
 				try {
-					
 					const res = await AxiosInterceptor.get("/api/account");
 					// const res = await axios.get(`${process.env.REACT_APP_PRO_API}/api/account`);
 					if (res.status === 200) {
 						setUser(res.data);
 						setAuthenticated(true);
 						setError(null);
-						setIsLoading(false);
 						navigate("/");
 					}
 				} catch (error) {
@@ -53,7 +54,8 @@ const AuthProvider = ({ children }) => {
 			setIsLoading(false);
 		};
 		fetchUser();
-	}, [navigate]);
+		console.log("chay vo day");
+	}, [error]);
 
 	const login = async (userAccount) => {
 		setIsLoading(true);
@@ -79,11 +81,7 @@ const AuthProvider = ({ children }) => {
 			const decode = jwtDecode(res.data.token);
 			const userInfo = JSON.parse(decode.UserInfo || '{}');
 			const clientRole = userInfo.Role; // Lấy vai trò từ UserInfo
-			// const clientRole = res.data.role;
-            console.log("user info", decode);
-			console.log("Role", clientRole);
 
-			
 			if (clientRole === "Admin" || clientRole === "Manager" || clientRole === "Student") {
 				localStorage.setItem('token', res.data.token);
 				localStorage.setItem('refreshToken', res.data.refreshToken);
@@ -94,7 +92,7 @@ const AuthProvider = ({ children }) => {
 							Authorization: `Bearer ${res.data.token}`
 						}
 					}
-					);
+				);
 				} catch (error) {
 					await logout();
 					setIsLoading(false);
@@ -105,19 +103,25 @@ const AuthProvider = ({ children }) => {
 					return;
 				}
 				if (resData.status === 200) {
-					if (resData.data.status === "ACTIVE") {
-						setUser(resData.data);
+					//TODO: Khi nao account co status thi if else
+					setUser(resData.data);
 						setAuthenticated(true);
 						setError(null);
 						console.log("Login successful, navigating to home...");
 						navigate("/");
-					} else {
-						await logout();
-						setError({
-							title: "Account Banned",
-							message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
-						});
-					}
+					// if (resData.data.status === "ACTIVE") {
+					// 	setUser(resData.data);
+					// 	setAuthenticated(true);
+					// 	setError(null);
+					// 	console.log("Login successful, navigating to home...");
+					// 	navigate("/");
+					// } else {
+					// 	await logout();
+					// 	setError({
+					// 		title: "Account Banned",
+					// 		message: "Tài khoản của bạn đã bị khóa, hãy thử lại."
+					// 	});
+					// }
 				}
 			} else {
 				setAuthenticated(false);
