@@ -3,11 +3,12 @@
 import FeatureSection from './FeatureSection';
 import Workflow from './WorkFlow';
 import Pricing from './Pricing';
+import Header from '~/components/Layout/components/Header';
 
  function Home() {
    return (
      <div className="max-w-7xl mx-auto pt-20 px-6"> 
-     
+  
      <HeroSection/>
      <FeatureSection/>
      <Workflow/>
