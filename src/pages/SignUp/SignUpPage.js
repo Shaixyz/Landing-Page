@@ -3,9 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import signupp from '~/assets/signupp.jpg';
 import google from '~/assets/google.svg';
 import useAuth from '~/context/auth/useAuth';
+import { useGoogleLogin } from '@react-oauth/google';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignUp() {
   const { signup, error } = useAuth();
+  const { googleLogin } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     userName: "",
     password: "",
@@ -19,6 +24,17 @@ function SignUp() {
       [fieldName]: value,
     }));
   };
+
+  const googleLoginHandler = useGoogleLogin({
+    onSuccess: (response) => {
+      console.log('Google login successful:', response.access_token);
+      googleLogin(response.access_token);
+    },
+    onError: (error) => {
+      console.error('Google login error:', error);
+      toast.error('Google login failed. Please try again.');
+    },
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -94,13 +110,15 @@ function SignUp() {
             Sign up
           </button>
 
-          <button
-            type="button"
-            className="w-full border border-gray-300 text-md p-2 rounded-lg mb-6 hover:bg-black hover:text-white"
+          <div className="mb-2 flex justify-center">
+            <button
+             onClick={() => googleLoginHandler ()}
+            class="w-full border border-gray-300 text-md p-2 rounded-lg mb-6 hover:bg-black hover:text-white"
           >
-            <img src={google} alt="img" className="w-6 h-6 inline mr-2" />
-            Sign up with Google
+            <img src={google} alt="img" class="w-6 h-6 inline mr-2 test-base" />
+            Sign in with Google
           </button>
+          </div>
 
           <div className="text-center text-gray-400">
             Already have an account?

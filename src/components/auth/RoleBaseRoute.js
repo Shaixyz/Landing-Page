@@ -6,7 +6,7 @@ export default function RoleBaseRoute({ children, accessibleRoles }) {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    console.log("User role:", user?.role);
+    // console.log("User role:", user?.role);
 
     const goBack = () => {
         navigate(-1); // This is equivalent to navigating back
