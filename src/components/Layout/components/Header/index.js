@@ -1,57 +1,40 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import Logo from "~/assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
 import DarkMode from "./DarkMode";
+import useAuth from "~/context/auth/useAuth";
+import R from "~/assets/R.png";
 
 const Menu = [
-  {
-    id: 1,
-    name: "Trang chủ",
-    link: "/#",
-  },
-  {
-    id: 2,
-    name: "Đánh giá hàng đầu",
-    link: "/#services",
-  },
-  {
-    id: 3,
-    name: "Điện Thoại",
-    link: "/#",
-  },
-  {
-    id: 3,
-    name: "Máy Tính",
-    link: "/#",
-  },
-  {
-    id: 3,
-    name: "Thiết bị điện tử",
-    link: "/#",
-  },
+  { id: 1, name: "Trang chủ", link: "/#" },
+  { id: 2, name: "Đánh giá hàng đầu", link: "/#services" },
+  { id: 3, name: "Điện Thoại", link: "/#" },
+  { id: 4, name: "Máy Tính", link: "/#" },
+  { id: 5, name: "Thiết bị điện tử", link: "/#" },
 ];
 
 const DropdownLinks = [
-  {
-    id: 1,
-    name: "Sản phẩm xu hướng",
-    link: "/#",
-  },
-  {
-    id: 2,
-    name: "Bán chạy nhất",
-    link: "/#",
-  },
-  {
-    id: 3,
-    name: "Đánh giá hàng đầu",
-    link: "/#",
-  },
+  { id: 1, name: "Sản phẩm xu hướng", link: "/#" },
+  { id: 2, name: "Bán chạy nhất", link: "/#" },
+  { id: 3, name: "Đánh giá hàng đầu", link: "/#" },
 ];
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
+  const { user, logout } = useAuth(); // Get user and logout from useAuth
+  const dropdownRef = useRef(null); // Ref for dropdown menu
+
+  const handleLogout = () => {
+    console.log("Logout clicked"); // Debug log
+    logout(); // Call the logout function
+  };
+
+  const showProfile = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       {/* upper Navbar */}
@@ -70,14 +53,14 @@ const Header = () => {
               <input
                 type="text"
                 placeholder="Tìm kiếm"
-                className="w-[200px] sm:w-[200px] group-hover:w-[300px] transition-all duration-300 rounded-full border border-gray-300 px-2 py-1 focus:outline-none focus:border-1 focus:border-primary dark:border-gray-500 dark:bg-gray-800  "
+                className="w-[200px] sm:w-[200px] group-hover:w-[300px] transition-all duration-300 rounded-full border border-gray-300 px-2 py-1 focus:outline-none focus:border-1 focus:border-primary dark:border-gray-500 dark:bg-gray-800"
               />
               <IoMdSearch className="text-gray-500 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3" />
             </div>
 
             {/* order button */}
             <button
-              className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white  py-1 px-4 rounded-full flex items-center gap-3 group"
+              className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3 group"
             >
               <span className="group-hover:block hidden transition-all duration-200">
                 Giỏ hàng
@@ -89,9 +72,59 @@ const Header = () => {
             <div>
               <DarkMode />
             </div>
+
+            {user ? (
+             <div className="relative">
+             <div
+               className="flex items-center gap-[15px] cursor-pointer"
+               onClick={showProfile}
+             >
+               <div className="h-[30px] w-[30px] rounded-full flex items-center justify-center relative z-40">
+                 <img
+                   src={R}
+                   alt="Profile Icon"
+                   className="h-full w-full rounded-full object-cover"
+                 />
+               </div>
+               <FaCaretDown className="text-xl" />
+             </div>
+           
+             {open && (
+               <div className="absolute right-1/2 transform translate-x-1/2 mt-2 w-52 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg z-50">
+               <div className="py-2 ">
+                 <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
+                   Profile
+                 </p>
+                 <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
+                   Settings
+                 </p>
+                 <p
+                   className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-red-600 dark:text-red-400 font-semibold w-full"
+                   onClick={handleLogout}
+                 >
+                   Log out
+                 </p>
+               </div>
+             </div>
+             
+             )}
+           </div>
+           
+            ) : (
+              // Sign In / Sign Up links for guests
+              <div className="flex gap-4">
+                <a href="/signin" className="hover:text-primary duration-200">
+                  Sign In
+                </a>
+                <a href="/signup" className="hover:text-primary duration-200">
+                  Sign Up
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
       {/* lower Navbar */}
       <div data-aos="zoom-in" className="flex justify-center">
         <ul className="sm:flex hidden items-center gap-4">
@@ -105,6 +138,7 @@ const Header = () => {
               </a>
             </li>
           ))}
+
           {/* Simple Dropdown and Links */}
           <li className="group relative cursor-pointer">
             <a href="#" className="flex items-center gap-[2px] py-2">
@@ -119,7 +153,7 @@ const Header = () => {
                   <li key={data.id}>
                     <a
                       href={data.link}
-                      className="inline-block w-full rounded-md p-2 hover:bg-primary/20 "
+                      className="inline-block w-full rounded-md p-2 hover:bg-primary/20"
                     >
                       {data.name}
                     </a>
