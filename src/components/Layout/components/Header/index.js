@@ -2,11 +2,12 @@ import React, { useState, useRef } from "react";
 import Logo from "~/assets/logo.png";
 import { IoMdSearch } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
-import { FaCaretDown } from "react-icons/fa";
+import { FaCaretDown, FaBell } from "react-icons/fa";
 import DarkMode from "./DarkMode";
 import useAuth from "~/context/auth/useAuth";
 import R from "~/assets/R.png";
 import { Link } from "react-router-dom";
+import Notifications from "~/Notification/Notification";
 
 const Menu = [
   { id: 1, name: "Trang chủ", link: "/#" },
@@ -24,16 +25,22 @@ const DropdownLinks = [
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useAuth(); // Get user and logout from useAuth
-  const dropdownRef = useRef(null); // Ref for dropdown menu
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const { user, logout } = useAuth(); 
 
   const handleLogout = () => {
-    console.log("Logout clicked"); // Debug log
-    logout(); // Call the logout function
+    console.log("Logout clicked");
+    logout();
   };
 
   const showProfile = () => {
     setOpen(!open);
+  };
+
+  const handleNewNotification = (newCount, newNotifications) => {
+    setNotificationCount(newCount);
+    setNotifications(newNotifications);
   };
 
   return (
@@ -68,6 +75,11 @@ const Header = () => {
               </span>
               <FaCartShopping className="text-xl text-white drop-shadow-sm cursor-pointer" />
             </button>
+
+            {/* Notifications Icon */}
+            <div className="relative">
+            <Notifications onNewNotification={handleNewNotification}  />
+            </div>
 
             {/* Darkmode Switch */}
             <div>
@@ -108,12 +120,9 @@ const Header = () => {
                       </p>
                     </div>
                   </div>
-
                 )}
               </div>
-
             ) : (
-              // Sign In / Sign Up links for guests
               <div className="hidden text-white lg:flex justify-center space-x-6 items-center">
                 <Link to="/signin" className="py-2 px-3 rounded-md border-2 text-black/80 dark:text-light dark:text-white border-black ">
                   Sign In
@@ -157,7 +166,7 @@ const Header = () => {
                   <li key={data.id}>
                     <a
                       href={data.link}
-                      className="inline-block w-full rounded-md p-2 hover:bg-primary/20"
+                      className="block p-2 hover:bg-primary hover:text-white rounded-md"
                     >
                       {data.name}
                     </a>
@@ -168,6 +177,7 @@ const Header = () => {
           </li>
         </ul>
       </div>
+      
     </div>
   );
 };
