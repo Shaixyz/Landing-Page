@@ -6,6 +6,7 @@ import { FaCaretDown } from "react-icons/fa";
 import DarkMode from "./DarkMode";
 import useAuth from "~/context/auth/useAuth";
 import R from "~/assets/R.png";
+import { Link } from "react-router-dom";
 
 const Menu = [
   { id: 1, name: "Trang chủ", link: "/#" },
@@ -74,51 +75,54 @@ const Header = () => {
             </div>
 
             {user ? (
-             <div className="relative">
-             <div
-               className="flex items-center gap-[15px] cursor-pointer"
-               onClick={showProfile}
-             >
-               <div className="h-[30px] w-[30px] rounded-full flex items-center justify-center relative z-40">
-                 <img
-                   src={R}
-                   alt="Profile Icon"
-                   className="h-full w-full rounded-full object-cover"
-                 />
-               </div>
-               <FaCaretDown className="text-xl" />
-             </div>
-           
-             {open && (
-               <div className="absolute right-1/2 transform translate-x-1/2 mt-2 w-52 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg z-50">
-               <div className="py-2 ">
-                 <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
-                   Profile
-                 </p>
-                 <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
-                   Settings
-                 </p>
-                 <p
-                   className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-red-600 dark:text-red-400 font-semibold w-full"
-                   onClick={handleLogout}
-                 >
-                   Log out
-                 </p>
-               </div>
-             </div>
-             
-             )}
-           </div>
-           
+              <div className="relative">
+                <div
+                  className="flex items-center gap-[15px] cursor-pointer"
+                  onClick={showProfile}
+                >
+                  <div className="h-[30px] w-[30px] rounded-full flex items-center justify-center relative z-40 ">
+                    <img
+                      src={R}
+                      alt="Profile Icon"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  </div>
+
+                  <FaCaretDown className="text-xl" />
+                </div>
+
+                {open && (
+                  <div className="absolute right-1/2 transform translate-x-1/2 mt-2 w-52 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg z-50">
+                    <div className="py-2 ">
+                      <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
+                        Profile
+                      </p>
+                      <p className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-gray-800 dark:text-gray-200 font-semibold w-full ">
+                        Settings
+                      </p>
+                      <p
+                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-red-600 dark:text-red-400 font-semibold w-full"
+                        onClick={handleLogout}
+                      >
+                        Log out
+                      </p>
+                    </div>
+                  </div>
+
+                )}
+              </div>
+
             ) : (
               // Sign In / Sign Up links for guests
-              <div className="flex gap-4">
-                <a href="/signin" className="hover:text-primary duration-200">
+              <div className="hidden text-white lg:flex justify-center space-x-6 items-center">
+                <Link to="/signin" className="py-2 px-3 rounded-md border-2 text-black/80 dark:text-light dark:text-white border-black ">
                   Sign In
-                </a>
-                <a href="/signup" className="hover:text-primary duration-200">
-                  Sign Up
-                </a>
+                </Link>
+                <Link to="/signup"
+                  className="bg-gradient-to-r from-primary to-secondary py-2 px-3 rounded-md text-white"
+                >
+                  Create an account
+                </Link>
               </div>
             )}
           </div>

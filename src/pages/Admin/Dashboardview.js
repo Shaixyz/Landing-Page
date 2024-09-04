@@ -16,7 +16,7 @@ const Dashboardview = () => {
             <div className='flex items-center justify-between h-[70px] shadow-lg px-[25px] '>
                 <div className='flex items-center rounded-[5px]'>
                     <input type="text" className=' bg-[#fcf8fa] h-[40px] outline-none pl-[13px] w-[350px] rounded-[5px] placeholder:text-[14px] leading-[20px] font-normal border' placeholder='Search for...' />
-                    <div className='bg-[#f6f7f9] h-[40px] px-[14px] flex items-center justify-center cursor-pointer rounded-tr-[5px] rounded-br-[5px]'>
+                    <div className='bg-primary/40 h-[40px] px-[14px] flex items-center justify-center cursor-pointer rounded-tr-[5px] rounded-br-[5px]'>
                         <FaSearch color='white' />
                     </div>
 
