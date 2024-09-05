@@ -10,7 +10,8 @@ export default function AuthRoute({ children }) {
     }
 
     return (
-        <div className="pt-[5.2vh] w-full flex justify-end">
+        // <div className="pt-[5.2vh] w-full flex justify-end">
+        <div>
             {children}
         </div>
     );

@@ -9,6 +9,7 @@ import Subscribe from "./Subscribe";
 import Testimonials from "./Testimonials";
 import Footer from "~/components/Layout/components/Footer";
 import Popup from "./Popup";
+import Notifications from "~/Notification/Notification";
 
 function Home() {
   const [orderPopup, setOrderPopup] = React.useState(false);
@@ -27,7 +28,6 @@ function Home() {
   }, []);
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200">
-
       <HeroSection handleOrderPopup={handleOrderPopup} />
       <Products />
       <TopProducts handleOrderPopup={handleOrderPopup}/>
@@ -35,6 +35,7 @@ function Home() {
       <Subscribe/>
       <Products/>
       <Testimonials/>
+      
       <Footer/>
       <Popup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
     </div>
