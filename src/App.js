@@ -12,6 +12,8 @@ import AboutUs from "./pages/AboutUs/AboutUsPage";
 import Sidebar from "./pages/Admin/Sidebar";
 import Dashboardview from "./pages/Admin/Dashboardview";
 import Main from "./pages/Admin/Main";
+import DetailProductPage from "./pages/DetailProduct/DetailProductPage";
+import ChatLayout from "./pages/Notification/ChatLayout";
 
 
 
@@ -35,6 +37,8 @@ function App() {
         <Route path='/signin' element={<LogIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/verify' element={<Verify />} />
+        <Route path='/detail-page' element={<DetailProductPage />} />
+        <Route path='/chat-layout' element={<ChatLayout />} />
 
         {/* Protected Routes */}
         <Route path='/features' element={
