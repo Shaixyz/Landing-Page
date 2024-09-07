@@ -18,7 +18,6 @@ const SearchPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("q");
-
   useEffect(() => {
     const fetchResults = async () => {
       let results = allProducts.filter((product) =>
@@ -47,6 +46,7 @@ const SearchPage = () => {
         filtered = filtered.filter(product => product.price > 200);
       }
     }
+
     if (filters.features) {
       filtered = filtered.filter(product => product.features === filters.features);
     }
@@ -71,13 +71,12 @@ const SearchPage = () => {
       [filterType]: "",
     }));
   };
-
-  const toggleHotFilter = () => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      hot: !prevFilters.hot,
-    }));
-  };
+  // const toggleHotFilter = () => {
+  //   setFilters((prevFilters) => ({
+  //     ...prevFilters,
+  //     hot: !prevFilters.hot,
+  //   }));
+  // };
 
   const handleSortChange = (sortType) => {
     let sortedResults = [...filteredResults];
@@ -128,7 +127,7 @@ const SearchPage = () => {
   ];
 
   return (
-    <div className="container mx-auto my-8 flex relative">
+    <div className="container mx-auto my-8 flex relative bg-white dark:bg-gray-900 dark:text-white duration-200">
 
       <div className="w-1/4 pr-8">
         <div className=" mb-6">
@@ -148,7 +147,7 @@ const SearchPage = () => {
                         onClick={() => clearFilter(key)}
                         className="text-red-500 ml-2"
                       >
-                        Clear
+                        x
                       </button>
                     </div>
                   )
@@ -214,22 +213,22 @@ const SearchPage = () => {
           />
         </div>
       </div>
-      
+
       {/* Hot Filter Button */}
       <div className="absolute top-0 right-0 flex space-x-4 mt-4 mr-4">
-        <button
+        {/* <button
           onClick={toggleHotFilter}
           className={`w-10 h-10 rounded-full ${filters.hot ? 'bg-red-500' : 'bg-gray-300'} flex items-center justify-center`}
           title="Filter by Hot Items"
         >
           🔥
-        </button>
+        </button> */}
 
         <button onClick={() => setShowSortModal(true)}>
           <FaFilter />
         </button>
       </div>
-      
+
       {/* Results Section */}
       <div className="w-3/4 mt-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
