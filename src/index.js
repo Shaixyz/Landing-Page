@@ -9,8 +9,12 @@ import { AuthProvider } from './context/auth/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Provider } from 'react-redux';
+import store from './context/slices/store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <Provider store={store}>
+
   <GoogleOAuthProvider clientId="824701382865-ps8rbovgq01ag5uq47np94j27816oe5p.apps.googleusercontent.com">
     <BrowserRouter>
       <AuthProvider>
@@ -20,6 +24,7 @@ root.render(
       </AuthProvider>
     </BrowserRouter>
     </GoogleOAuthProvider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

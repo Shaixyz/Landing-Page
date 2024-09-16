@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import LogIn from "./components/auth/LoginPage";
 import Home from "./pages/Home";
@@ -13,9 +13,6 @@ import Sidebar from "./pages/Admin/Sidebar";
 import Dashboardview from "./pages/Admin/Dashboardview";
 import Main from "./pages/Admin/Main";
 import SearchPage from "./pages/Search/SearchPage";
-
-
-
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -36,7 +33,7 @@ function App() {
         <Route path='/signin' element={<LogIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/verify' element={<Verify />} />
-        <Route path ='search' element={<SearchPage/>}/>
+        <Route path='/search' element={<SearchPage />} />
         {/* Protected Routes */}
         <Route path='/features' element={
           <AuthRoute>
@@ -71,7 +68,6 @@ function App() {
             </RoleBaseRoute>
           </AuthRoute>
         } />
-
       </Routes>
     </Fragment>
   );
