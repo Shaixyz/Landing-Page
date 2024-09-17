@@ -6,8 +6,6 @@ import AxiosInterceptor from '../../components/api/AxiosInterceptor';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { googleLogout } from '@react-oauth/google';
-import { useDispatch, useSelector } from 'react-redux';
-import { setToken, setRefreshToken, clearTokens, setUser } from '../slices/authSlice';
 
 const AuthContext = createContext({
     isAuthenticated: false,
